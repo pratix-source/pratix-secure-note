@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, Route, Switch, useLocation } from "wouter";
 import { ArrowRight, Check, ChevronDown, Copy, ExternalLink, Globe2, LockKeyhole, Menu, Search, ShieldCheck, Sparkles, X, Zap } from "lucide-react";
 import { toast } from "sonner";
@@ -15,8 +15,7 @@ const copy = {
 };
 
 const tools = [
-  { rank: 1, slug: "secure-note", name: "Secure Note", tr: "Şifreli Not", category: "Privacy", icon: "◈", score: 94, tag: "PRIVACY WEDGE", desc: "Write a note, encrypt it locally, and share only when you choose.", color: "cyan", featured: true },
-  { rank: 2, slug: "bulk-barcode-qr-generator", name: "Bulk Barcode & QR Generator", tr: "Toplu Barkod & QR Üretici", category: "Commerce", icon: "▦", score: 89, tag: "LOW COMPETITION", desc: "Generate EAN, UPC, Code 128 and QR codes without uploading your catalogue.", color: "lime", featured: true },
+  { rank: 1, slug: "bulk-barcode-qr-generator", name: "Bulk Barcode & QR Generator", tr: "Toplu Barkod & QR Üretici", category: "Commerce", icon: "▦", score: 89, tag: "LOW COMPETITION", desc: "Generate EAN, UPC, Code 128 and QR codes without uploading your catalogue.", color: "lime", featured: true },
   { rank: 3, slug: "utm-builder", name: "UTM Builder", tr: "UTM Oluşturucu", category: "Marketing", icon: "⌁", score: 86, tag: "FAST TO SHIP", desc: "Build clean campaign links with consistent naming and zero tracking scripts.", color: "violet", featured: true },
   { rank: 4, slug: "readability-score", name: "Readability Score Checker", tr: "Okunabilirlik Skoru", category: "SEO", icon: "Aa", score: 81, tag: "NICHE FIT", desc: "Check clarity with Flesch, Fog, SMOG and practical content signals.", color: "rose", featured: true },
   { rank: 5, slug: "freelancer-rate-calculator", name: "Freelancer Rate Calculator", tr: "Freelance Ücret Hesaplayıcı", category: "Finance", icon: "₺", score: 78, tag: "REPEAT USE", desc: "Turn your income target, costs and capacity into an hourly or daily rate.", color: "blue", featured: true },
@@ -27,13 +26,14 @@ const tools = [
   { rank: 10, slug: "css-gradient-generator", name: "CSS Gradient Generator", tr: "CSS Gradient Üretici", category: "Design", icon: "◒", score: 52, tag: "SHAREABLE", desc: "Compose linear, radial and conic gradients with ready-to-copy CSS.", color: "amber" },
 ];
 
-function getLocale() { return document.documentElement.lang?.slice(0, 2) || "en"; }
+function getLocale() { const routeLocale = window.location.pathname.split("/")[1]; return languages.some(([code]) => code === routeLocale) ? routeLocale : (document.documentElement.lang?.slice(0, 2) || "en"); }
 function t(key: keyof typeof copy.en) { const locale = getLocale() as keyof typeof copy; return (copy[locale]?.[key] || copy.en[key]); }
 
 function Layout({ children }: { children: React.ReactNode }) {
   const [menu, setMenu] = useState(false);
   const [location, navigate] = useLocation();
   const [locale, setLocale] = useState(getLocale());
+  useEffect(() => { const activeLocale = getLocale(); setLocale(activeLocale); document.documentElement.lang = activeLocale; }, [location]);
   const switchLocale = (value: string) => { setLocale(value); document.documentElement.lang = value; navigate(`/${value}${location === "/" ? "/" : location.replace(/^\/[a-z]{2}/, "")}`); };
   return <div className="site-shell">
     <header className="topbar"><Link href={`/${locale}/`} className="brand"><span className="brand-mark">P</span><span>pratix<span className="brand-dot">.</span>io</span></Link><nav className={menu ? "nav-links open" : "nav-links"}><a href="#tools">{t("navTools")}</a><a href="#why">{t("navWhy")}</a><a href="#roadmap">{t("navRoadmap")}</a><div className="language"><Globe2 size={14}/><select value={locale} onChange={e => switchLocale(e.target.value)} aria-label="Language">{languages.map(([code, name]) => <option key={code} value={code}>{name}</option>)}</select><ChevronDown size={13}/></div></nav><button className="menu-btn" onClick={() => setMenu(!menu)} aria-label="Toggle navigation">{menu ? <X/> : <Menu/>}</button></header>
