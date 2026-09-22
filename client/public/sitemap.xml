@@ -1,36 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://pratix.io/en/</loc><priority>1.0</priority></url>
-  <url><loc>https://pratix.io/tr/</loc><priority>0.9</priority></url>
-  <url><loc>https://pratix.io/de/</loc><priority>0.7</priority></url>
-  <url><loc>https://pratix.io/es/</loc><priority>0.7</priority></url>
-  <url><loc>https://pratix.io/fr/</loc><priority>0.7</priority></url>
-  <url><loc>https://pratix.io/it/</loc><priority>0.6</priority></url>
-  <url><loc>https://pratix.io/pt/</loc><priority>0.6</priority></url>
-  <url><loc>https://pratix.io/nl/</loc><priority>0.6</priority></url>
-  <url><loc>https://pratix.io/pl/</loc><priority>0.6</priority></url>
-  <url><loc>https://pratix.io/ja/</loc><priority>0.6</priority></url>
-  <url><loc>https://pratix.io/ko/</loc><priority>0.6</priority></url>
-  <url><loc>https://pratix.io/ar/</loc><priority>0.6</priority></url>
-  <url><loc>https://pratix.io/en/tools/bulk-barcode-qr-generator</loc><priority>0.9</priority></url>
-  <url><loc>https://pratix.io/en/tools/utm-builder</loc><priority>0.9</priority></url>
-  <url><loc>https://pratix.io/en/tools/readability-score</loc><priority>0.8</priority></url>
-  <url><loc>https://pratix.io/en/tools/freelancer-rate-calculator</loc><priority>0.8</priority></url>
-  <url><loc>https://pratix.io/en/tools/json-formatter</loc><priority>0.7</priority></url>
-  <url><loc>https://pratix.io/en/tools/meta-tag-generator</loc><priority>0.7</priority></url>
-  <url><loc>https://pratix.io/en/tools/password-generator</loc><priority>0.7</priority></url>
-  <url><loc>https://pratix.io/en/tools/color-palette-generator</loc><priority>0.7</priority></url>
-  <url><loc>https://pratix.io/en/tools/css-gradient-generator</loc><priority>0.6</priority></url>
-  <url><loc>https://pratix.io/en/guides/privacy-first-tools</loc><priority>0.8</priority></url>
-  <url><loc>https://pratix.io/tr/guides/privacy-first-tools</loc><priority>0.8</priority></url>
-  <url><loc>https://pratix.io/de/guides/privacy-first-tools</loc><priority>0.6</priority></url>
-  <url><loc>https://pratix.io/es/guides/privacy-first-tools</loc><priority>0.6</priority></url>
-  <url><loc>https://pratix.io/fr/guides/privacy-first-tools</loc><priority>0.6</priority></url>
-  <url><loc>https://pratix.io/it/guides/privacy-first-tools</loc><priority>0.5</priority></url>
-  <url><loc>https://pratix.io/pt/guides/privacy-first-tools</loc><priority>0.5</priority></url>
-  <url><loc>https://pratix.io/nl/guides/privacy-first-tools</loc><priority>0.5</priority></url>
-  <url><loc>https://pratix.io/pl/guides/privacy-first-tools</loc><priority>0.5</priority></url>
-  <url><loc>https://pratix.io/ja/guides/privacy-first-tools</loc><priority>0.5</priority></url>
-  <url><loc>https://pratix.io/ko/guides/privacy-first-tools</loc><priority>0.5</priority></url>
-  <url><loc>https://pratix.io/ar/guides/privacy-first-tools</loc><priority>0.5</priority></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url><loc>https://www.pratix.io/en/secure-note</loc><priority>0.9</priority><xhtml:link rel="alternate" hreflang="en" href="https://www.pratix.io/en/secure-note"/><xhtml:link rel="alternate" hreflang="x-default" href="https://www.pratix.io/en/secure-note"/></url>
+  <url><loc>https://www.pratix.io/tr/sifreli-not</loc><priority>0.9</priority><xhtml:link rel="alternate" hreflang="tr" href="https://www.pratix.io/tr/sifreli-not"/><xhtml:link rel="alternate" hreflang="x-default" href="https://www.pratix.io/en/secure-note"/></url>
+  <url><loc>https://www.pratix.io/de/sichere-notiz</loc><priority>0.7</priority></url>
+  <url><loc>https://www.pratix.io/fr/note-securisee</loc><priority>0.7</priority></url>
+  <url><loc>https://www.pratix.io/es/nota-segura</loc><priority>0.7</priority></url>
+  <url><loc>https://www.pratix.io/it/nota-sicura</loc><priority>0.6</priority></url>
+  <url><loc>https://www.pratix.io/nl/veilige-notitie</loc><priority>0.6</priority></url>
+  <url><loc>https://www.pratix.io/sv/saker-anteckning</loc><priority>0.6</priority></url>
+  <url><loc>https://www.pratix.io/da/sikker-note</loc><priority>0.6</priority></url>
+  <url><loc>https://www.pratix.io/no/sikkert-notat</loc><priority>0.6</priority></url>
+  <url><loc>https://www.pratix.io/fi/suojattu-muistiinpano</loc><priority>0.6</priority></url>
+  <url><loc>https://www.pratix.io/zh/anquan-bianjian</loc><priority>0.6</priority></url>
 </urlset>
