@@ -22,4 +22,16 @@
   <url><loc>https://pratix.io/en/tools/password-generator</loc><priority>0.7</priority></url>
   <url><loc>https://pratix.io/en/tools/color-palette-generator</loc><priority>0.7</priority></url>
   <url><loc>https://pratix.io/en/tools/css-gradient-generator</loc><priority>0.6</priority></url>
+  <url><loc>https://pratix.io/en/guides/privacy-first-tools</loc><priority>0.8</priority></url>
+  <url><loc>https://pratix.io/tr/guides/privacy-first-tools</loc><priority>0.8</priority></url>
+  <url><loc>https://pratix.io/de/guides/privacy-first-tools</loc><priority>0.6</priority></url>
+  <url><loc>https://pratix.io/es/guides/privacy-first-tools</loc><priority>0.6</priority></url>
+  <url><loc>https://pratix.io/fr/guides/privacy-first-tools</loc><priority>0.6</priority></url>
+  <url><loc>https://pratix.io/it/guides/privacy-first-tools</loc><priority>0.5</priority></url>
+  <url><loc>https://pratix.io/pt/guides/privacy-first-tools</loc><priority>0.5</priority></url>
+  <url><loc>https://pratix.io/nl/guides/privacy-first-tools</loc><priority>0.5</priority></url>
+  <url><loc>https://pratix.io/pl/guides/privacy-first-tools</loc><priority>0.5</priority></url>
+  <url><loc>https://pratix.io/ja/guides/privacy-first-tools</loc><priority>0.5</priority></url>
+  <url><loc>https://pratix.io/ko/guides/privacy-first-tools</loc><priority>0.5</priority></url>
+  <url><loc>https://pratix.io/ar/guides/privacy-first-tools</loc><priority>0.5</priority></url>
 </urlset>
