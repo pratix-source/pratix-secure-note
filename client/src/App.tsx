@@ -1,42 +1,57 @@
-import { Toaster } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import NotFound from "@/pages/NotFound";
-import { Route, Switch } from "wouter";
-import ErrorBoundary from "./components/ErrorBoundary";
-import { ThemeProvider } from "./contexts/ThemeContext";
-import Home from "./pages/Home";
+import { useMemo, useState } from "react";
+import { Link, Route, Switch, useLocation } from "wouter";
+import { ArrowRight, Check, ChevronDown, Copy, ExternalLink, Globe2, LockKeyhole, Menu, Search, ShieldCheck, Sparkles, X, Zap } from "lucide-react";
+import { toast } from "sonner";
 
+const languages = [
+  ["en", "English"], ["tr", "Türkçe"], ["de", "Deutsch"], ["es", "Español"], ["fr", "Français"], ["it", "Italiano"],
+  ["pt", "Português"], ["nl", "Nederlands"], ["pl", "Polski"], ["ja", "日本語"], ["ko", "한국어"], ["ar", "العربية"],
+];
 
-function Router() {
-  return (
-    <Switch>
-      <Route path={"/"} component={Home} />
-      <Route path={"/404"} component={NotFound} />
-      {/* Final fallback route */}
-      <Route component={NotFound} />
-    </Switch>
-  );
+const copy = {
+  en: { navTools: "Tools", navWhy: "Why Pratix", navRoadmap: "Roadmap", heroKicker: "PRIVACY-FIRST UTILITIES", heroTitle: "Small tools.\nSerious leverage.", heroSub: "A focused toolkit for sellers, creators, builders, and independent teams. Fast, useful, and designed to keep your data on your device.", browse: "Browse tools", ranking: "See the ranking", launch: "Launch tool", viewAll: "View all tools", featured: "Low-competition opportunities", featuredSub: "A practical first wave selected from your market analysis — prioritised by niche fit, privacy differentiation, and build velocity.", privacy: "Your data stays local", privacySub: "No account. No uploads. No tracking by default.", languages: "12 languages", languagesSub: "English-first, Turkish included from day one.", sitemap: "Sitemap-ready", sitemapSub: "Clear routes for every category and tool.", why: "The Pratix advantage", whySub: "Utility without the noise.", roadmap: "A calm, compounding roadmap", roadmapSub: "Ship the low-competition wedge first. Build trust, then breadth.", footer: "Privacy-first utilities for the open web." },
+  tr: { navTools: "Araçlar", navWhy: "Neden Pratix", navRoadmap: "Yol haritası", heroKicker: "GİZLİLİK ÖNCELİKLİ ARAÇLAR", heroTitle: "Küçük araçlar.\nBüyük kaldıraç.", heroSub: "Satıcılar, içerik üreticileri, geliştiriciler ve bağımsız ekipler için odaklı araç seti. Hızlı, kullanışlı ve verilerinizi cihazınızda tutacak şekilde tasarlandı.", browse: "Araçlara göz at", ranking: "Sıralamayı gör", launch: "Aracı aç", viewAll: "Tüm araçlar", featured: "Düşük rekabetli fırsatlar", featuredSub: "Pazar analizinizden seçilen ilk dalga: niş uyum, gizlilik farkı ve geliştirme hızıyla önceliklendirildi.", privacy: "Verileriniz yerel kalır", privacySub: "Hesap yok. Yükleme yok. Varsayılan olarak takip yok.", languages: "12 dil", languagesSub: "İngilizce varsayılan, Türkçe ilk günden dahil.", sitemap: "Sitemap hazır", sitemapSub: "Her kategori ve araç için net rotalar.", why: "Pratix avantajı", whySub: "Gürültüsüz fayda.", roadmap: "Sakin ve birikimli yol haritası", roadmapSub: "Önce düşük rekabetli alanı sahiplen. Güven oluştur, sonra genişle.", footer: "Açık web için gizlilik öncelikli araçlar." }
+};
+
+const tools = [
+  { rank: 1, slug: "secure-note", name: "Secure Note", tr: "Şifreli Not", category: "Privacy", icon: "◈", score: 94, tag: "PRIVACY WEDGE", desc: "Write a note, encrypt it locally, and share only when you choose.", color: "cyan", featured: true },
+  { rank: 2, slug: "bulk-barcode-qr-generator", name: "Bulk Barcode & QR Generator", tr: "Toplu Barkod & QR Üretici", category: "Commerce", icon: "▦", score: 89, tag: "LOW COMPETITION", desc: "Generate EAN, UPC, Code 128 and QR codes without uploading your catalogue.", color: "lime", featured: true },
+  { rank: 3, slug: "utm-builder", name: "UTM Builder", tr: "UTM Oluşturucu", category: "Marketing", icon: "⌁", score: 86, tag: "FAST TO SHIP", desc: "Build clean campaign links with consistent naming and zero tracking scripts.", color: "violet", featured: true },
+  { rank: 4, slug: "readability-score", name: "Readability Score Checker", tr: "Okunabilirlik Skoru", category: "SEO", icon: "Aa", score: 81, tag: "NICHE FIT", desc: "Check clarity with Flesch, Fog, SMOG and practical content signals.", color: "rose", featured: true },
+  { rank: 5, slug: "freelancer-rate-calculator", name: "Freelancer Rate Calculator", tr: "Freelance Ücret Hesaplayıcı", category: "Finance", icon: "₺", score: 78, tag: "REPEAT USE", desc: "Turn your income target, costs and capacity into an hourly or daily rate.", color: "blue", featured: true },
+  { rank: 6, slug: "json-formatter", name: "JSON Formatter & Validator", tr: "JSON Biçimlendirici", category: "Developer", icon: "{}", score: 68, tag: "HIGH DEMAND", desc: "Format, validate, minify and transform JSON entirely in your browser.", color: "slate" },
+  { rank: 7, slug: "meta-tag-generator", name: "Meta Tag Generator", tr: "Meta Etiket Üretici", category: "SEO", icon: "<> ", score: 64, tag: "SEO STACK", desc: "Generate SEO, Open Graph and social preview tags with a live preview.", color: "orange" },
+  { rank: 8, slug: "password-generator", name: "Password Generator", tr: "Şifre Üretici", category: "Privacy", icon: "✦", score: 61, tag: "TRUST BUILDER", desc: "Create strong passwords with Web Crypto — nothing leaves your device.", color: "green" },
+  { rank: 9, slug: "color-palette-generator", name: "Color Palette Generator", tr: "Renk Paleti Üretici", category: "Design", icon: "◒", score: 55, tag: "SHAREABLE", desc: "Create balanced palettes and check WCAG contrast in seconds.", color: "pink" },
+  { rank: 10, slug: "css-gradient-generator", name: "CSS Gradient Generator", tr: "CSS Gradient Üretici", category: "Design", icon: "◒", score: 52, tag: "SHAREABLE", desc: "Compose linear, radial and conic gradients with ready-to-copy CSS.", color: "amber" },
+];
+
+function getLocale() { return document.documentElement.lang?.slice(0, 2) || "en"; }
+function t(key: keyof typeof copy.en) { const locale = getLocale() as keyof typeof copy; return (copy[locale]?.[key] || copy.en[key]); }
+
+function Layout({ children }: { children: React.ReactNode }) {
+  const [menu, setMenu] = useState(false);
+  const [location, navigate] = useLocation();
+  const [locale, setLocale] = useState(getLocale());
+  const switchLocale = (value: string) => { setLocale(value); document.documentElement.lang = value; navigate(`/${value}${location === "/" ? "/" : location.replace(/^\/[a-z]{2}/, "")}`); };
+  return <div className="site-shell">
+    <header className="topbar"><Link href={`/${locale}/`} className="brand"><span className="brand-mark">P</span><span>pratix<span className="brand-dot">.</span>io</span></Link><nav className={menu ? "nav-links open" : "nav-links"}><a href="#tools">{t("navTools")}</a><a href="#why">{t("navWhy")}</a><a href="#roadmap">{t("navRoadmap")}</a><div className="language"><Globe2 size={14}/><select value={locale} onChange={e => switchLocale(e.target.value)} aria-label="Language">{languages.map(([code, name]) => <option key={code} value={code}>{name}</option>)}</select><ChevronDown size={13}/></div></nav><button className="menu-btn" onClick={() => setMenu(!menu)} aria-label="Toggle navigation">{menu ? <X/> : <Menu/>}</button></header>
+    {children}
+    <footer className="footer"><div><Link href={`/${locale}/`} className="brand"><span className="brand-mark">P</span><span>pratix<span className="brand-dot">.</span>io</span></Link><p>{t("footer")}</p></div><div className="footer-links"><a href="/sitemap.xml">Sitemap</a><a href="#tools">{t("navTools")}</a><a href="#why">{t("navWhy")}</a><span>© 2026 Pratix</span></div></footer>
+  </div>;
 }
 
-// NOTE: About Theme
-// - First choose a default theme according to your design style (dark or light bg), than change color palette in index.css
-//   to keep consistent foreground/background color across components
-// - If you want to make theme switchable, pass `switchable` ThemeProvider and use `useTheme` hook
+function ToolCard({ tool }: { tool: typeof tools[number] }) { return <Link href={`/${getLocale()}/tools/${tool.slug}`} className={`tool-card ${tool.featured ? "featured" : ""}`}><div className="tool-top"><span className={`tool-icon ${tool.color}`}>{tool.icon}</span><span className="tool-rank">#{String(tool.rank).padStart(2, "0")}</span></div><div className="tool-category">{tool.category}<span className="score">{tool.score}/100 fit</span></div><h3>{getLocale() === "tr" ? tool.tr : tool.name}</h3><p>{tool.desc}</p><div className="tool-bottom"><span className="tool-tag">{tool.tag}</span><ArrowRight size={17}/></div></Link> }
 
-function App() {
-  return (
-    <ErrorBoundary>
-      <ThemeProvider
-        defaultTheme="light"
-        // switchable
-      >
-        <TooltipProvider>
-          <Toaster />
-          <Router />
-        </TooltipProvider>
-      </ThemeProvider>
-    </ErrorBoundary>
-  );
-}
+function Home() { const [query, setQuery] = useState(""); const filtered = useMemo(() => tools.filter(x => `${x.name} ${x.category} ${x.desc}`.toLowerCase().includes(query.toLowerCase())), [query]); return <Layout><main>
+  <section className="hero"><div className="hero-grid"></div><div className="hero-copy"><div className="eyebrow"><span></span>{t("heroKicker")} <span className="eyebrow-line"></span> v1.0</div><h1>{t("heroTitle").split("\n").map((line, i) => <span key={line} className={i === 1 ? "accent-line" : ""}>{line}</span>)}</h1><p>{t("heroSub")}</p><div className="hero-actions"><a href="#tools" className="button primary">{t("browse")} <ArrowRight size={16}/></a><a href="#ranking" className="button secondary">{t("ranking")}</a></div><div className="hero-proof"><div><strong>20</strong><span>ideas mapped</span></div><div><strong>12</strong><span>languages</span></div><div><strong>0</strong><span>uploads needed</span></div></div></div><div className="hero-orbit"><div className="orbit-card orbit-main"><div className="mini-label">PRATIX / SIGNAL</div><div className="signal-value">92<span>/100</span></div><div className="signal-caption">marketplace fee calculator</div><div className="signal-bar"><i></i></div><div className="signal-foot"><span>low competition</span><span>ready to ship</span></div></div><div className="orbit-card orbit-float"><LockKeyhole size={16}/><span>local by default</span></div><div className="orbit-ring ring-one"></div><div className="orbit-ring ring-two"></div></div></section>
+  <section className="trust-strip"><div><ShieldCheck size={18}/><span><b>{t("privacy")}</b><small>{t("privacySub")}</small></span></div><div><Globe2 size={18}/><span><b>{t("languages")}</b><small>{t("languagesSub")}</small></span></div><div><Zap size={18}/><span><b>{t("sitemap")}</b><small>{t("sitemapSub")}</small></span></div></section>
+  <section className="section" id="tools"><div className="section-heading"><div><span className="section-kicker">01 / TOOL INDEX</span><h2>{t("featured")}</h2><p>{t("featuredSub")}</p></div><div className="search-box"><Search size={17}/><input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search 20 tools..." /></div></div><div className="filter-row"><span className="filter-label">SORTED BY OPPORTUNITY</span><span className="filter-pill active">All</span><span className="filter-pill">Commerce</span><span className="filter-pill">Privacy</span><span className="filter-pill">SEO</span><span className="filter-pill">Developer</span></div><div className="tools-grid">{filtered.map(tool => <ToolCard key={tool.slug} tool={tool}/>)}</div></section>
+  <section className="section ranking-section" id="ranking"><div className="section-heading"><div><span className="section-kicker">02 / DECISION LOGIC</span><h2>Lowest competition, first.</h2><p>The ranking turns the original 20 ideas into an execution order. Scores are directional — based on niche specificity, privacy differentiation, and implementation speed.</p></div><div className="ranking-stamp"><Sparkles size={17}/><span>HEURISTIC<br/><b>OPPORTUNITY INDEX</b></span></div></div><div className="ranking-table"><div className="ranking-head"><span>RANK / TOOL</span><span>CATEGORY</span><span>FIT</span><span>STATUS</span></div>{tools.slice(0, 6).map(tool => <Link href={`/${getLocale()}/tools/${tool.slug}`} className="ranking-row" key={tool.slug}><span><b>0{tool.rank}</b>{getLocale() === "tr" ? tool.tr : tool.name}</span><span>{tool.category}</span><span><i style={{ width: `${tool.score}%` }}></i>{tool.score}</span><span className="status">{tool.tag}</span></Link>)}</div></section>
+  <section className="section why-section" id="why"><div className="section-heading"><div><span className="section-kicker">03 / PRODUCT PRINCIPLES</span><h2>{t("why")}</h2><p>{t("whySub")}</p></div></div><div className="principles"><div><span>01</span><LockKeyhole/><h3>Local-first</h3><p>Tools do the work in the browser. Sensitive inputs do not need a server to be useful.</p></div><div><span>02</span><Globe2/><h3>Global by default</h3><p>One information architecture, twelve language surfaces, and clean localized routes.</p></div><div><span>03</span><Zap/><h3>Useful on day one</h3><p>Focused utilities with a clear output beat bloated dashboards and forced sign-ups.</p></div></div></section>
+  <section className="section roadmap-section" id="roadmap"><div className="roadmap-panel"><div><span className="section-kicker">04 / SHIP PLAN</span><h2>{t("roadmap")}</h2><p>{t("roadmapSub")}</p></div><div className="roadmap-list"><div className="roadmap-item done"><span>01</span><div><b>Foundation</b><small>Brand, routes, 12-language shell, sitemap</small></div><Check size={16}/></div><div className="roadmap-item active"><span>02</span><div><b>Low-competition wedge</b><small>Commerce, privacy and campaign utilities</small></div><span className="now">NOW</span></div><div className="roadmap-item"><span>03</span><div><b>Tool workflows</b><small>Connect outputs across the Pratix ecosystem</small></div><span className="next">NEXT</span></div></div></div></section>
+</main></Layout> }
 
-export default App;
+function ToolPage({ slug }: { slug: string }) { const tool = tools.find(x => x.slug === slug) || tools[0]; const [value, setValue] = useState(""); const [output, setOutput] = useState(""); const run = () => { let result = value; if (slug === "json-formatter") { try { result = JSON.stringify(JSON.parse(value), null, 2); } catch { result = "Invalid JSON — check commas, quotes and brackets."; } } else if (slug === "utm-builder") { result = `https://example.com/?utm_source=${encodeURIComponent(value || "newsletter")}&utm_medium=campaign&utm_campaign=pratix-launch`; } else if (slug === "password-generator") { result = Array.from(crypto.getRandomValues(new Uint32Array(20)), n => "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%"[n % 64]).join(""); } else if (slug === "readability-score") { const words = value.trim().split(/\s+/).filter(Boolean).length; const sentences = Math.max(1, value.split(/[.!?]+/).filter(Boolean).length); result = `Words: ${words}\nSentences: ${sentences}\nAverage words / sentence: ${(words / sentences).toFixed(1)}\n\nTip: Keep sentences under 20 words for a clearer first draft.`; } else if (slug === "freelancer-rate-calculator") { const monthly = Number(value) || 5000; result = `Suggested hourly rate: ${(monthly / 80).toFixed(2)}\nSuggested daily rate: ${(monthly / 10).toFixed(2)}\nBased on 80 billable hours / month.`; } else if (slug === "marketplace-fee-calculator") { const price = Number(value) || 1000; result = `At ₺${price.toFixed(2)} sale price:\nEstimated 15% fee: ₺${(price * .15).toFixed(2)}\nNet before shipping/tax: ₺${(price * .85).toFixed(2)}`; } else { result = value || "Ready — enter content to generate your result."; } setOutput(result); }; return <Layout><main className="tool-page"><div className="tool-breadcrumb"><Link href={`/${getLocale()}/`}>Pratix</Link><span>/</span><span>{tool.category}</span><span>/</span><b>{getLocale() === "tr" ? tool.tr : tool.name}</b></div><div className="tool-page-grid"><div><div className={`large-tool-icon ${tool.color}`}>{tool.icon}</div><span className="section-kicker">{tool.category.toUpperCase()} / TOOL {String(tool.rank).padStart(2, "0")}</span><h1>{getLocale() === "tr" ? tool.tr : tool.name}</h1><p className="tool-lead">{tool.desc} Everything runs locally in your browser.</p><div className="tool-meta-row"><span><LockKeyhole size={14}/> Client-side</span><span><Globe2 size={14}/> 12 languages</span><span><ShieldCheck size={14}/> No uploads</span></div></div><div className="tool-workbench"><div className="workbench-top"><span>WORKSPACE</span><span className="local-badge"><span></span> local</span></div><label>{slug === "password-generator" ? "Optional length / seed" : slug === "marketplace-fee-calculator" || slug === "freelancer-rate-calculator" ? "Amount (₺)" : "Input"}</label><textarea value={value} onChange={e => setValue(e.target.value)} placeholder={slug === "json-formatter" ? '{ "hello": "world" }' : "Type or paste here..."} /><button className="button primary full" onClick={run}>{t("launch")} <ArrowRight size={16}/></button>{output && <div className="output"><div className="output-head"><span>RESULT</span><button onClick={() => { navigator.clipboard?.writeText(output); toast.success("Copied to clipboard"); }}><Copy size={14}/> Copy</button></div><pre>{output}</pre></div>}</div></div></main></Layout> }
+
+export default function App() { return <Switch><Route path="/:locale/tools/:slug">{(params) => <ToolPage slug={params.slug}/>}</Route><Route path="/:locale/">{() => <Home/>}</Route><Route path="/tools/:slug">{(params) => <ToolPage slug={params.slug}/>}</Route><Route path="/">{() => <Home/>}</Route></Switch> }
